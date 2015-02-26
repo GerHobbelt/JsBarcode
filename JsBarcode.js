@@ -79,7 +79,7 @@
 
 		//Set the width and height of the barcode
 		canvas.width = binary.length*options.width+2*options.quite;
-		canvas.height = options.height + (options.displayValue ? options.fontSize : 0);
+		canvas.height = options.height + 20 + (options.displayValue ? options.fontSize : 0);
 
 		//Paint the canvas
 		ctx.clearRect(0,0,canvas.width,canvas.height);
