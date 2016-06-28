@@ -1,8 +1,8 @@
 // Import all the barcodes
-import barcodes from './barcodes/index';
+import barcodes from './barcodes/index.js';
 
 // Import the renderers
-import renderers from './renderers/index';
+import renderers from './renderers/index.js';
 
 // Help functions
 import merge from './help/merge.js';
