@@ -1,8 +1,8 @@
 // Import all the barcodes
-import barcodes from './barcodes/';
+import barcodes from './barcodes/index';
 
 // Import the renderers
-import renderers from './renderers/';
+import renderers from './renderers/index';
 
 // Help functions
 import merge from './help/merge.js';
@@ -210,7 +210,8 @@ if (typeof jQuery !== 'undefined') {
 }
 
 // Export to commonJS
-module.exports = JsBarcode;
+//module.exports = JsBarcode;
+export default JsBarcode;
 
 // Takes an element and returns an object with information about how
 // it should be rendered
