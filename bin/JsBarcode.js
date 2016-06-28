@@ -1,12 +1,16 @@
 'use strict';
 
-var _barcodes = require('./barcodes/index.js');
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 
-var _barcodes2 = _interopRequireDefault(_barcodes);
+var _index = require('./barcodes/index.js');
 
-var _renderers = require('./renderers/index.js');
+var _index2 = _interopRequireDefault(_index);
 
-var _renderers2 = _interopRequireDefault(_renderers);
+var _index3 = require('./renderers/index.js');
+
+var _index4 = _interopRequireDefault(_index3);
 
 var _merge = require('./help/merge.js');
 
@@ -24,21 +28,28 @@ var _getOptionsFromElement = require('./help/getOptionsFromElement.js');
 
 var _getOptionsFromElement2 = _interopRequireDefault(_getOptionsFromElement);
 
+var _defaults = require('./defaults/defaults.js');
+
+var _defaults2 = _interopRequireDefault(_defaults);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // The protype of the object returned from the JsBarcode() call
 
 
-// Help functions
-// Import all the barcodes
+// Import the renderers
 var API = function API() {};
 
 // The first call of the library API
-// Will return an object with all barcodes calls and the information needed
-// when the rendering function is called and options the barcodes might need
+// Will return an object with all barcodes calls and the data that is used
+// by the renderers
 
 
-// Import the renderers
+// Default values
+
+
+// Help functions
+// Import all the barcodes
 var JsBarcode = function JsBarcode(element, text, options) {
 	var api = new API();
 
@@ -49,9 +60,9 @@ var JsBarcode = function JsBarcode(element, text, options) {
 	// Variables that will be pased through the API calls
 	api._renderProperties = getRenderProperies(element);
 	api._encodings = [];
-	api._options = defaults;
+	api._options = _defaults2.default;
 
-	// If text is set, use simple syntax
+	// If text is set, use the simple syntax (render the barcode directly)
 	if (typeof text !== "undefined") {
 		options = options || {};
 
@@ -69,14 +80,14 @@ var JsBarcode = function JsBarcode(element, text, options) {
 
 // To make tests work TODO: remove
 JsBarcode.getModule = function (name) {
-	return _barcodes2.default[name];
+	return _index2.default[name];
 };
 
 // Register all barcodes
-for (var name in _barcodes2.default) {
-	if (_barcodes2.default.hasOwnProperty(name)) {
+for (var name in _index2.default) {
+	if (_index2.default.hasOwnProperty(name)) {
 		// Security check if the propery is a prototype property
-		registerBarcode(_barcodes2.default, name);
+		registerBarcode(_index2.default, name);
 	}
 }
 function registerBarcode(barcodes, name) {
@@ -90,6 +101,7 @@ function registerBarcode(barcodes, name) {
 	};
 }
 
+// encode() handles the Encoder call and builds the binary string to be rendered
 function encode(text, Encoder, options) {
 	// Ensure that text is a string
 	text = "" + text;
@@ -99,13 +111,14 @@ function encode(text, Encoder, options) {
 	// If the input is not valid for the encoder, throw error.
 	// If the valid callback option is set, call it instead of throwing error
 	if (!encoder.valid()) {
-		if (options.valid === defaults.valid) {
+		if (options.valid === _defaults2.default.valid) {
 			throw new Error('"' + text + '" is not a valid input for ' + name);
 		} else {
 			options.valid(false);
 		}
 	}
 
+	// Make a request for the binary data (and other infromation) that should be rendered
 	var encoded = encoder.encode();
 
 	// Encodings can be nestled like [[1-1, 1-2], 2, [3-1, 3-2]
@@ -122,12 +135,12 @@ function encode(text, Encoder, options) {
 
 function autoSelectBarcode() {
 	// If CODE128 exists. Use it
-	if (_barcodes2.default["CODE128"]) {
+	if (_index2.default["CODE128"]) {
 		return "CODE128";
 	}
 
 	// Else, take the first (probably only) barcode
-	return Object.keys(_barcodes2.default)[0];
+	return Object.keys(_index2.default)[0];
 }
 
 // Sets global encoder options
@@ -144,8 +157,9 @@ API.prototype.blank = function (size) {
 	return this;
 };
 
+// Initialize JsBarcode on all HTML elements defined.
 API.prototype.init = function () {
-	// this._renderProperties can be
+	// Make sure renderProperies is an array
 	if (!Array.isArray(this._renderProperties)) {
 		this._renderProperties = [this._renderProperties];
 	}
@@ -161,7 +175,7 @@ API.prototype.init = function () {
 
 		var text = options.value;
 
-		var Encoder = _barcodes2.default[options.format.toUpperCase()];
+		var Encoder = _index2.default[options.format.toUpperCase()];
 
 		var encoded = encode(text, Encoder, options);
 
@@ -186,7 +200,7 @@ API.prototype.render = function () {
 
 // Prepares the encodings and calls the renderer
 function render(renderProperties, encodings, options) {
-	var renderer = _renderers2.default[renderProperties.renderer];
+	var renderer = _index4.default[renderProperties.renderer];
 
 	encodings = (0, _linearizeEncodings2.default)(encodings);
 
@@ -210,6 +224,7 @@ if (typeof window !== "undefined") {
 }
 
 // Export to jQuery
+/*global jQuery */
 if (typeof jQuery !== 'undefined') {
 	jQuery.fn.JsBarcode = function (content, options) {
 		var elementArray = [];
@@ -222,7 +237,8 @@ if (typeof jQuery !== 'undefined') {
 
 // Export to commonJS
 //module.exports = JsBarcode;
-export default JsBarcode;
+exports.default = JsBarcode;
+
 // Takes an element and returns an object with information about how
 // it should be rendered
 // This could also return an array with these objects
@@ -233,6 +249,7 @@ export default JsBarcode;
 //     completed, calls afterRender (function)
 //   options (optional): Options that can be defined in the element
 // }
+
 function getRenderProperies(element) {
 	// If the element is a string, query select call again
 	if (typeof element === "string") {
@@ -249,18 +266,18 @@ function getRenderProperies(element) {
 	}
 	// If element is array. Recursivly call with every object in the array
 	else if (Array.isArray(element)) {
-			var returnArray = [];
-			for (var i = 0; i < element.length; i++) {
-				returnArray.push(getRenderProperies(element[i]));
+			var _returnArray = [];
+			for (var _i = 0; _i < element.length; _i++) {
+				_returnArray.push(getRenderProperies(element[_i]));
 			}
-			return returnArray;
+			return _returnArray;
 		}
 		// If element, render on canvas and set the uri as src
 		else if (typeof HTMLCanvasElement !== 'undefined' && element instanceof HTMLImageElement) {
 				var canvas = document.createElement('canvas');
 				return {
 					element: canvas,
-					options: (0, _getOptionsFromElement2.default)(element, defaults),
+					options: (0, _getOptionsFromElement2.default)(element, _defaults2.default),
 					renderer: "canvas",
 					afterRender: function afterRender() {
 						element.setAttribute("src", canvas.toDataURL());
@@ -271,7 +288,7 @@ function getRenderProperies(element) {
 			else if (typeof SVGElement !== 'undefined' && element instanceof SVGElement) {
 					return {
 						element: element,
-						options: (0, _getOptionsFromElement2.default)(element, defaults),
+						options: (0, _getOptionsFromElement2.default)(element, _defaults2.default),
 						renderer: "svg"
 					};
 				}
@@ -279,7 +296,7 @@ function getRenderProperies(element) {
 				else if (typeof HTMLCanvasElement !== 'undefined' && element instanceof HTMLCanvasElement) {
 						return {
 							element: element,
-							options: (0, _getOptionsFromElement2.default)(element, defaults),
+							options: (0, _getOptionsFromElement2.default)(element, _defaults2.default),
 							renderer: "canvas"
 						};
 					}
@@ -293,24 +310,3 @@ function getRenderProperies(element) {
 							throw new Error("Not supported type to render on.");
 						}
 }
-
-var defaults = {
-	width: 2,
-	height: 100,
-	format: "auto",
-	displayValue: true,
-	fontOptions: "",
-	font: "monospace",
-	textAlign: "center",
-	textPosition: "bottom",
-	textMargin: 2,
-	fontSize: 20,
-	background: "#ffffff",
-	lineColor: "#000000",
-	margin: 10,
-	marginTop: undefined,
-	marginBottom: undefined,
-	marginLeft: undefined,
-	marginRight: undefined,
-	valid: function valid(_valid) {}
-};

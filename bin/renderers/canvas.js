@@ -95,13 +95,12 @@ function drawCanvasBarcode(canvas, options, encoding) {
 	var binary = encoding.data;
 
 	// Creates the barcode out of the encoded binary
-	var yFrom, yHeight;
+	var yFrom;
 	if (options.textPosition == "top") {
 		yFrom = options.marginTop + options.fontSize + options.textMargin;
 	} else {
 		yFrom = options.marginTop;
 	}
-	yHeight = options.height;
 
 	ctx.fillStyle = options.lineColor;
 
