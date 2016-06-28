@@ -1,10 +1,10 @@
 'use strict';
 
-var _barcodes = require('./barcodes/');
+var _barcodes = require('./barcodes/index.js');
 
 var _barcodes2 = _interopRequireDefault(_barcodes);
 
-var _renderers = require('./renderers/');
+var _renderers = require('./renderers/index.js');
 
 var _renderers2 = _interopRequireDefault(_renderers);
 
@@ -221,8 +221,8 @@ if (typeof jQuery !== 'undefined') {
 }
 
 // Export to commonJS
-module.exports = JsBarcode;
-
+//module.exports = JsBarcode;
+export default JsBarcode;
 // Takes an element and returns an object with information about how
 // it should be rendered
 // This could also return an array with these objects

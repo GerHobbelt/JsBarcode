@@ -4,21 +4,21 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _CODE = require('./CODE39/');
+var _CODE = require('./CODE39/index.js');
 
-var _CODE2 = require('./CODE128/');
+var _CODE2 = require('./CODE128/index.js');
 
-var _EAN_UPC = require('./EAN_UPC/');
+var _EAN_UPC = require('./EAN_UPC/index.js');
 
-var _ITF = require('./ITF14/');
+var _ITF = require('./ITF14/index.js');
 
-var _ITF2 = require('./ITF/');
+var _ITF2 = require('./ITF/index.js');
 
-var _MSI = require('./MSI/');
+var _MSI = require('./MSI/index.js');
 
-var _pharmacode = require('./pharmacode/');
+var _pharmacode = require('./pharmacode/index.js');
 
-var _GenericBarcode = require('./GenericBarcode/');
+var _GenericBarcode = require('./GenericBarcode/index.js');
 
 exports.default = {
   CODE39: _CODE.CODE39,
